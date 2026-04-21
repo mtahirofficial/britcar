@@ -1,0 +1,14 @@
+.poNumber {
+    cursor: pointer;
+    font-weight: bold;
+    color: black;
+}
+
+.poNumber:hover {
+    color: var(--p-action-primary);
+    text-decoration: underline;
+}
+
+.tr:nth-child(even) {
+    background-color: var(--p-surface-hovered);
+}

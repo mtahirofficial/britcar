@@ -1,0 +1,18 @@
+table.replaceTable {
+    width: 100%;
+}
+
+td.replaceTd {
+    width: 30%;
+}
+
+th.replaceTh {
+    width: 70%;
+    text-align: left;
+}
+
+td.replaceTd, th.replaceTh {
+    padding: 7px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+}

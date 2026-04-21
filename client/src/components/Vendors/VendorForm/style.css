@@ -1,0 +1,48 @@
+.address {
+    width: 100%;
+    padding: 0.5rem 1.2rem;
+    color: var(--p-text);
+    border: 1px solid var(--p-border-subdued);
+    border-top-color: var(--p-border-shadow);
+    border-radius: var(--p-border-radius-base);
+    line-height: 2.4rem;
+    font-size: 1.4rem;
+}
+
+.address:focus {
+    outline: 1px solid transparent;
+    box-shadow: 0 0 0 2px var(--p-focused);
+    border-radius: var(--p-border-radius-base);
+}
+
+.addressError {
+    border: 1px solid var(--p-border-critical) !important;
+    background-color: var(--p-surface-critical-subdued) !important;
+}
+
+.cutoffTable {
+    border-collapse: collapse;
+    overflow-y: auto;
+    /* table-layout: fixed; */
+    width: 100%;
+}
+
+.cutoffTable th, .cutoffTable td {
+    border-bottom: 1px solid #ddd;
+    padding: 5px;
+}
+
+.check {
+    float: left;
+    margin: 4px 0;
+}
+
+.input {
+    float: right;
+    width: calc(100% - 35px);
+}
+
+.check .Polaris-Choice__Control {
+    margin-left: 10px;
+    margin-right: 0;
+}

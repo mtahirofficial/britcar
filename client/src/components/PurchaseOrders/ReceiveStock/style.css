@@ -1,0 +1,23 @@
+table.receiveTable {
+    width: 100%;
+}
+
+td.receiveTd {
+    width: 30%;
+}
+
+th.receiveTh {
+    width: 70%;
+    text-align: left;
+}
+
+td.receiveTd, th.receiveTh {
+    padding: 7px;
+    border-bottom: 1px solid #ddd;
+}
+
+th.receiveTh img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}

@@ -1,0 +1,9 @@
+    Header always unset X-Frame-Options
+
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/logiceve/nodejs/purchase_orders"
+PassengerBaseURI "/"
+PassengerNodejs "/home/logiceve/nodevenv/nodejs/purchase_orders/14/bin/node"
+PassengerAppType node
+PassengerStartupFile server.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END

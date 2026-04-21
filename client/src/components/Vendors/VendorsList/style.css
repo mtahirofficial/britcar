@@ -1,0 +1,54 @@
+.vendorTable {
+    border-collapse: collapse;
+    overflow-y: auto;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    width: 100%;
+}
+
+.vendorTableHead {
+    box-shadow: 0px 2px #006e52;
+    position: sticky;
+    top: 0px;
+    z-index: 99;
+    background-color: #FAFBFB;
+}
+
+table.vendorTable th, table.vendorTable td {
+    height: 50px;
+}
+
+.tr:nth-child(even) {
+    background-color: white;
+}
+
+.tr:hover {
+    background-color: var(--p-surface-hovered);
+}
+
+.vendorTableHead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.vendorTableHead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+}
+
+.th, .td {
+    padding: 8px;
+}
+
+.td button {
+    margin: 3px;
+}
+
+.tableParent {
+    max-width: 100%;
+    overflow-x: auto;
+}

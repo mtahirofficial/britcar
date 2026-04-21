@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding: 40px 25px;
+        }
+
+        table.productTable,
+        table.infoTable {
+            width: 100%;
+        }
+
+        .infoTable {
+            margin-bottom: 20px;
+        }
+
+        .infoTable th,
+        .infoTable td {
+            width: 50%;
+            text-align: left;
+            padding: 2px 4px;
+        }
+
+        table.productTable td {
+            padding: 2px 4px;
+        }
+
+        table.productTable,
+        table.productTable th,
+        table.productTable td {
+            border: 2px solid black;
+            border-collapse: collapse;
+        }
+
+        p.date {
+            padding: 10px 0px;
+        }
+
+        .address {
+            white-space: pre-wrap;
+            vertical-align: top;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="heading">
+        <!-- <b> -->
+            Purchase Order #{{poOrderNum}}
+        <!-- </b> -->
+    </h1>
+
+    <p class="date">
+        Date: {{date}}
+    </p>
+
+    <table class="infoTable" style="width: 500px; display: block; border: 0;">
+        <thead>
+            <tr>
+                <th>From:</th>
+                <th>To:</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>{{marchantName}}</th>
+                <th>{{sellerName}}</th>
+            </tr>
+            <tr>
+                <td class="address">{{marchantAddress}}</td>
+                <td class="address">{{sellerAddress}}</td>
+            </tr>
+            <tr>
+                <td>{{marchantVatNumber}}</td>
+                <td>{{sellerVatNumber}}</td>
+            </tr>
+            <tr>
+                <td>{{marchantPhone}}</td>
+                <td>{{sellerPhone}}</td>
+            </tr>
+            <tr>
+                <td>{{marchantEmail}}</td>
+                <td>{{sellerEmail}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="productTable">
+        <thead>
+            <tr>
+                <th>Part Number</th>
+                <th>Quantity</th>
+                <th>Description</th>
+                <th>BritCar Internal Ref</th>
+                <th>Expected Cost/Unit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{rows}}
+        </tbody>
+    </table>
+</body>
+
+</html>

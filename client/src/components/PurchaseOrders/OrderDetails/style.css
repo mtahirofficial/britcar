@@ -1,0 +1,17 @@
+.top, .bottom {
+    width: 100%;
+}
+
+.topTd {
+    width: 30%;
+}
+
+.topTh {
+    width: 70%;
+}
+
+.topTd, .topTh, .bottomTd, .bottomTh {
+    text-align: left;
+    padding: 7px;
+    border-bottom: 1px solid #ddd;
+}

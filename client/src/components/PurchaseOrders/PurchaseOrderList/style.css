@@ -1,0 +1,44 @@
+.tblOrders {
+    border-collapse: collapse;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.tblHead {
+    box-shadow: 0px 2px #006e52;
+    position: sticky;
+    top: 55px;
+    z-index: 99;
+    background-color: #FAFBFB;
+}
+
+.tblHead th {
+    text-align: left;
+    margin-bottom: 5px;
+    text-decoration: none;
+    padding: 5px;
+}
+
+.tblHead th:first-child {
+    border-top-left-radius: 5px;
+}
+
+.tblHead th:last-child {
+    border-top-right-radius: 5px;
+}
+
+.tr td {
+    padding: 5px;
+}
+
+.tr:hover {
+    background-color: var(--p-surface-hovered);
+}
+
+table.tblOrders th:first-child, table.tblOrders td:first-child {
+    padding-left: 15px;
+}
+
+table.tblOrders th, table.tblOrders td {
+    height: 50px;
+}

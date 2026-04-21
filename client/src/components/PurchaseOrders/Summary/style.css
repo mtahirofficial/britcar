@@ -1,0 +1,15 @@
+.summaryTable {
+    border-collapse: collapse;
+    overflow-y: auto;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    width: 100%;
+}
+
+.summaryTableHead {
+    box-shadow: 0px 2px #006e52;
+    position: sticky;
+    top: 0px;
+    z-index: 99;
+    background-color: #FAFBFB;
+}
