@@ -1,81 +1,84 @@
-'use strict';
+"use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('purchaseorderitems', {
+    await queryInterface.createTable("purchaseorderitems", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.BIGINT
+        type: Sequelize.BIGINT,
       },
       shopId: {
-        type: Sequelize.BIGINT
+        type: Sequelize.BIGINT,
       },
       barcode: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       variantId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       purchaseorderId: {
-        type: Sequelize.BIGINT
+        type: Sequelize.BIGINT,
       },
       patNum: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       orderId: {
-        type: Sequelize.BIGINT
+        type: Sequelize.BIGINT,
       },
       orderNumber: {
-        type: Sequelize.BIGINT
+        type: Sequelize.BIGINT,
       },
       qty: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       received: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       notes: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       sku: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       internalRef: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       costPerUnit: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
       },
       costPlusTax: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
       },
       grams: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       dimensions: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+      },
+      partNumber: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('purchaseorderitems');
-  }
+    await queryInterface.dropTable("purchaseorderitems");
+  },
 };
