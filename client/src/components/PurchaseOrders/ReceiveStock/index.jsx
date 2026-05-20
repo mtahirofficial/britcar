@@ -229,7 +229,46 @@ const ReceiveStock = (props) => {
         </tr>
         <tr>
           <td className="receiveTd">Part Number</td>
-          <th className="receiveTh">{props.product.partNumber}</th>
+          {/* <th className="receiveTh">{props.product.part_number}</th> */}
+          <th className="receiveTh">
+            <TextField
+              labelHidden
+              focused={false}
+              name="part_number"
+              label="Add part number"
+              placeholder="Add part number"
+              type="text"
+              value={Values.part_number}
+              onFocus={() => {
+                setOldValues({ ...OldValues, part_number: Values.part_number });
+              }}
+              onChange={(value) => handleChange("part_number", value)}
+              onBlur={({ target }) => {
+                if (Values.part_number !== "" && Values.part_number !== null) {
+                  if (Values.part_number === OldValues.part_number) {
+                    handleChange("part_number", OldValues.part_number);
+                  } else {
+                    setError({ ...Error, [target.name]: "" });
+                    addMetafields(
+                      props.product.variantId,
+                      props.product.id,
+                      { part_number: Values.part_number },
+                      "part_number",
+                    );
+                  }
+                }
+              }}
+              suffix={
+                ValuesUpdating.part_number ? (
+                  <Spinner
+                    accessibilityLabel="part_number spinner"
+                    size="small"
+                  />
+                ) : null
+              }
+              error={Error.part_number}
+            />
+          </th>
         </tr>
         <tr>
           <td className="receiveTd">Destination Bin</td>
@@ -302,7 +341,7 @@ const ReceiveStock = (props) => {
                       addMetafields(
                         props.product.variantId,
                         props.product.id,
-                        { weight: Number(Values.weight) },
+                        { weight: Values.weight },
                         target.name,
                       );
                     } else {
@@ -343,6 +382,8 @@ const ReceiveStock = (props) => {
               onChange={(value) => handleChange("dimensions", value)}
               onBlur={({ target }) => {
                 if (Values.dimensions !== "" && Values.dimensions !== null) {
+                  console.log("Values.dimensions", Values.dimensions);
+
                   const dimensions = Values.dimensions.split("x");
                   if (Values.dimensions === OldValues.dimensions) {
                     handleChange("dimensions", OldValues.dimensions);
@@ -361,20 +402,21 @@ const ReceiveStock = (props) => {
                     addMetafields(
                       props.product.variantId,
                       props.product.id,
-                      {
-                        dimensions: {
-                          width: Number(dimensions[0].trim()),
-                          height: Number(dimensions[1].trim()),
-                          length: Number(dimensions[2].trim()),
-                        },
-                      },
-                      target.name,
+                      { dimensions_cm: Values.dimensions },
+                      // {
+                      //   dimensions: {
+                      //     width: Number(dimensions[0].trim()),
+                      //     height: Number(dimensions[1].trim()),
+                      //     length: Number(dimensions[2].trim()),
+                      //   },
+                      // },
+                      "dimensions_cm",
                     );
                   }
                 }
               }}
               suffix={
-                ValuesUpdating.dimensions ? (
+                ValuesUpdating.dimensions_cm ? (
                   <Spinner
                     accessibilityLabel="dimensions spinner"
                     size="small"

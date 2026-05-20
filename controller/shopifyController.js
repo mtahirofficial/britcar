@@ -46,22 +46,22 @@ const ShopifyController = {
       return null;
     }
   },
+
   getVariant: async (variantId, domain, accessToken) => {
     let data = JSON.stringify({
       query: `{
         productVariant(id: "gid://shopify/ProductVariant/${variantId}") {
-          # harmonizedSystemCode
           id
           title
-          # metafields(first: 10) {
-          #   nodes {
-          #     key
-          #     jsonValue
-          #     namespace
-          #     ownerType
-          #     value
-          #   }
-          # }
+          metafields(first: 10) {
+            nodes {
+              key
+              jsonValue
+              namespace
+              ownerType
+              value
+            }
+          }
            inventoryItem {
              countryCodeOfOrigin
              unitCost {
@@ -90,7 +90,131 @@ const ShopifyController = {
       return null;
     }
   },
+  setProduct: async (productId, domain, accessToken, input) => {
+    let data = JSON.stringify({
+      query: `#graphql mutation productSet(
+        $input: ProductSetInput!
+        $synchronous: Boolean
+        $identifier: ProductSetIdentifiers
+      ) {
+        productSet(
+          input: $input
+          synchronous: $synchronous
+          identifier: $identifier
+        ) {
+          product {
+            id
+            title
 
+            metafields(first: 10) {
+              nodes {
+                key
+                jsonValue
+                namespace
+                ownerType
+                value
+                type
+              }
+            }
+          }
+
+          userErrors {
+            field
+            message
+          }
+        }
+      }`,
+      variables: {
+        input,
+        // input: {
+        //   metafields: [
+        //     {
+        //       namespace: "custom",
+        //       key: "part_number",
+        //       value: "XZQ000060",
+        //       type: "single_line_text_field",
+        //     },
+        //   ],
+        // },
+        synchronous: true,
+        identifier: { id: `gid://shopify/Product/${productId}` },
+      },
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `https://${domain}/admin/api/2025-01/graphql.json`,
+      headers: {
+        "x-shopify-access-token": accessToken,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    try {
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
+      return response.data.data.productSet.product;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+  setMetafields: async (
+    ownerId,
+    domain,
+    accessToken,
+    metafield,
+    variant = false,
+  ) => {
+    let data = JSON.stringify({
+      query: `
+        mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
+          metafieldsSet(metafields: $metafields) {
+            metafields {
+              id
+              key
+              namespace
+              value
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      `,
+      variables: {
+        metafields: [
+          {
+            ownerId: `gid://shopify/${variant ? "ProductVariant" : "Product"}/${ownerId}`,
+            ...metafield,
+          },
+        ],
+      },
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `https://${domain}/admin/api/2025-01/graphql.json`,
+      headers: {
+        "x-shopify-access-token": accessToken,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    try {
+      const response = await axios.request(config);
+      console.log("response.data", JSON.stringify(response.data));
+      return response.data?.data?.metafieldsSet?.metafields?.[0];
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
   getAppId: async (shop_data) => {
     var data = JSON.stringify({
       query: `#graphql

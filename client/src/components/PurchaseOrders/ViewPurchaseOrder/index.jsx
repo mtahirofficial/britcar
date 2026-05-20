@@ -136,7 +136,7 @@ const ViewPurchaseOrder = (props) => {
         orderId: oldProduct.orderId,
         orderNumber: oldProduct.orderNumber,
         patNum: oldProduct.patNum,
-        partNumber: oldProduct.partNumber,
+        part_number: oldProduct.part_number,
         qty: oldProduct.qty,
         received: oldProduct.received,
         shopId: shopId,

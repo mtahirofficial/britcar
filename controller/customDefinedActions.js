@@ -207,10 +207,6 @@ const cda = {
           // const metafields = mf.reduce((acc, item) => {
           const metafields = product?.metafields?.nodes?.reduce((acc, item) => {
             if (item.namespace === "custom") {
-              if (item.key === "bin_location") {
-                acc.bin_location = item.value;
-              }
-
               if (item.key === "part_number") {
                 acc.part_number = item.value;
               }
@@ -259,8 +255,14 @@ const cda = {
             domain,
             accessToken,
           );
-          console.log("variant", variant);
-
+          console.log("variant?.metafields?.nodes", variant?.metafields?.nodes);
+          const metafields = variant?.metafields?.nodes?.reduce((acc, item) => {
+            if (item.namespace === "custom" && item.key === "bin_location") {
+              acc.bin_location = item.value;
+            }
+            return acc;
+          }, {});
+          metafieldValues[item.variantId] = metafields;
           const orderNumber = await db.getSingleField(order, "orderNumber", {
             orderId: item.orderId,
           });
@@ -274,7 +276,7 @@ const cda = {
             variantId: item.variantId,
             orderId: item.orderId,
             orderNumber: orderNumber,
-            sku: metafieldValues[item.productId]?.bin_location || "",
+            sku: metafieldValues[item.variantId]?.bin_location || "",
             status: "stand",
             image: item.image,
             qty: vendors[vendorName][item.variantId],
@@ -284,7 +286,7 @@ const cda = {
             costPlusTax: item.tax,
             grams: item.grams,
             dimensions: metafieldValues[item.productId]?.dimensions_cm || "",
-            partNumber: metafieldValues[item.productId]?.part_number || "",
+            part_number: metafieldValues[item.productId]?.part_number || "",
             notes: "-",
           };
           console.log(item.productId, product);
@@ -554,7 +556,7 @@ const cda = {
 
         const rows = order.purchaseorderitems.map((product) => {
           return `<tr key={i}>
-                        <td>${product.partNumber}</td>
+                        <td>${product.part_number}</td>
                         <td>${product.qty}</td>
                         <td style="text-align: left;">${product.description}</td>
                         <td>${product.orderNumber}</td>

@@ -65,7 +65,7 @@ module.exports = {
       dimensions: {
         type: Sequelize.STRING,
       },
-      partNumber: {
+      part_number: {
         type: Sequelize.STRING,
       },
       createdAt: {

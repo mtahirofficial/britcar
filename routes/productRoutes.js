@@ -1,16 +1,12 @@
-const router = require('express').Router()
-const { productController } = require('../controller');
+const router = require("express").Router();
+const { productController } = require("../controller");
+
+router.route("/sku/:id/:shopId").put(productController.updateProductSku);
 
 router
-    .route("/sku/:id/:shopId")
-    .put(productController.updateProductSku)
+  .route("/metafileds/:key/:variantId/:shopId")
+  .post(productController.updateProductMetafields);
 
-router
-    .route("/metafileds/:key/:variantId/:shopId")
-    .post(productController.addMetafields)
+router.route("/delete").delete(productController.deleteItem);
 
-router
-    .route("/delete")
-    .delete(productController.deleteItem)
-
-module.exports = router
+module.exports = router;

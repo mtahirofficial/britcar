@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       costPlusTax: DataTypes.FLOAT,
       grams: DataTypes.INTEGER,
       dimensions: DataTypes.STRING,
-      partNumber: DataTypes.STRING,
+      part_number: DataTypes.STRING,
     },
     {
       sequelize,
