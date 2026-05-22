@@ -33,7 +33,7 @@ const ordersController = {
       method: "POST",
       url: `https://${domain}/admin/api/2025-07/graphql.json`,
       data: JSON.stringify({
-        query: `{productVariants(first: 10, query: "barcode:*${searchQuery}* title:*${searchQuery}* sku:*${searchQuery}*") {
+        query: `{productVariants(first: 10, query: "sku:*${searchQuery}*") {
           edges {
             node {
               barcode
