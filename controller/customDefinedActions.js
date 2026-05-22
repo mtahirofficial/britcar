@@ -257,7 +257,8 @@ const cda = {
             internalRef: "",
             costPerUnit: variant.inventoryItem?.unitCost?.amount || 0,
             costPlusTax: item.tax,
-            grams: item.grams,
+            grams:
+              (metafieldValues[item.productId]?.weight * 1000).toString() || "",
             dimensions: metafieldValues[item.productId]?.dimensions_cm || "",
             part_number: metafieldValues[item.productId]?.part_number || "",
             notes: "-",
@@ -378,7 +379,7 @@ const cda = {
   getDispatchBay: async (orderId, shopData) => {
     const options = {
       method: "GET",
-      url: `https://${shopData.domain}/admin/api/2021-10/orders/${orderId}.json`,
+      url: `https://${shopData.domain}/admin/api/2025-07/orders/${orderId}.json`,
       headers: {
         "content-type": "application/json",
         "X-Shopify-Access-Token": shopData.accessToken,

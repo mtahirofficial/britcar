@@ -557,7 +557,7 @@ const ViewPurchaseOrder = (props) => {
         </Card>
         <ModalComponent
           large={false}
-          modalTitle={`Purchase Order #${order.id} -- Code #${product.barcode}`}
+          modalTitle={`Purchase Order #${order.id} -- Code #${product.part_number}`}
           active={Object.keys(product).length > 0}
           handleClose={() => dispatch({ type: viewProduct, payload: {} })}
           component={<ReplaceProduct replace={Replace} />}

@@ -22,6 +22,7 @@ const ReceiveStock = (props) => {
         ? (props.product.grams / 1000).toString()
         : "",
     dimensions: props.product.dimensions,
+    part_number: props.product.part_number,
   });
   const [OldValues, setOldValues] = useState({
     bin: "",

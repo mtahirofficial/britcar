@@ -72,13 +72,8 @@ const ordersController = {
     };
 
     const response = await cda.sendAxiosRequest(options);
-    fs.writeFile("replace.txt", JSON.stringify(response.data), function (err) {
-      if (err) throw err;
-      console.log("Saved!");
-    });
     if (response.data && response.data.productVariants) {
       const { edges } = response.data.productVariants;
-      console.log("edges", edges);
       let productList = [];
       if (edges.length > 0) {
         for (const { node } of edges) {
