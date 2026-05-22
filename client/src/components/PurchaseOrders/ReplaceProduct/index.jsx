@@ -72,7 +72,7 @@ const ReplaceProduct = (props) => {
         <div style={{ marginTop: "none" }}>
           <div style={{ width: "85%", float: "left" }}>
             <TextField
-              placeholder="Search product with barcode, title or SKU"
+              placeholder="Search product with barcode, variant title or SKU"
               value={InputValue}
               onChange={(value) => setInputValue(value)}
             />
