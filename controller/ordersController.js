@@ -33,7 +33,7 @@ const ordersController = {
       method: "POST",
       url: `https://${domain}/admin/api/2025-07/graphql.json`,
       data: JSON.stringify({
-        query: `{productVariants(first: 10, query: "barcode:*${searchQuery}*") {
+        query: `{productVariants(first: 10, query: "barcode:*${searchQuery}* title:*${searchQuery}* sku:*${searchQuery}*") {
           edges {
             node {
               barcode
@@ -72,8 +72,17 @@ const ordersController = {
     };
 
     const response = await cda.sendAxiosRequest(options);
+    await fs.writeFile(
+      "replace.txt",
+      JSON.stringify(response.data),
+      function (err) {
+        if (err) throw err;
+        console.log("Saved!");
+      },
+    );
     if (response.data && response.data.productVariants) {
       const { edges } = response.data.productVariants;
+      console.log("edges", edges);
       let productList = [];
       if (edges.length > 0) {
         for (const { node } of edges) {
