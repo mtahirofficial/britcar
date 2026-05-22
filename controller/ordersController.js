@@ -99,7 +99,7 @@ const ordersController = {
           if (variantId !== id) {
             let title = variant.displayName.replace(" - Default Title", "");
             productList.push({
-              label: `${currencySymbol}${variant.price} | ${variant.barcode} | ${variant.product.productType} | ${variant.product.vendor} | ${title}`,
+              label: `${currencySymbol}${variant.price} | ${variant.barcode ? variant.barcode + " | " : ""}${variant.product.productType ? variant.product.productType + " | " : ""} | ${variant.product.vendor ? variant.product.vendor + " | " : ""}${title}`,
               value: variant,
             });
           }
