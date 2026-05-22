@@ -33,7 +33,7 @@ const ordersController = {
       method: "POST",
       url: `https://${domain}/admin/api/2025-07/graphql.json`,
       data: JSON.stringify({
-        query: `{productVariants(first: 10, query: "sku:*${searchQuery}*") {
+        query: `{productVariants(first: 10, query: "barcode:${searchQuery}* OR title:${searchQuery}* OR sku:${searchQuery}*") {
           edges {
             node {
               barcode
@@ -82,7 +82,6 @@ const ordersController = {
     );
     if (response.data && response.data.productVariants) {
       const { edges } = response.data.productVariants;
-      console.log("edges", edges);
       let productList = [];
       if (edges.length > 0) {
         for (const { node } of edges) {
