@@ -26,9 +26,9 @@ const AppRouter = (props) => {
     <React.Fragment>
       <Navbar options={navOptions} />
       <Switch>
-        <Route exact path="/">
+        {/* <Route exact path="/">
           <PurchaseOrderList />
-        </Route>
+        </Route> */}
         <Route exact path="/orders">
           <PurchaseOrderList />
         </Route>

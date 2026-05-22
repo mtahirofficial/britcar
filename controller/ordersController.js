@@ -13,6 +13,7 @@ const {
 } = dbModels;
 const { Op } = require("sequelize");
 var cron = require("node-cron");
+const fs = require("fs");
 
 cron.schedule("0 9,15 * * *", () => {
   console.log("task will run on 09:00am and 03:00pm");
@@ -30,9 +31,9 @@ const ordersController = {
     const currencySymbol = moneyFormat.replace("{{amount}}", "");
     const options = {
       method: "POST",
-      url: `https://${domain}/admin/api/2021-07/graphql.json`,
+      url: `https://${domain}/admin/api/2025-07/graphql.json`,
       data: JSON.stringify({
-        query: `{productVariants(first: 10, query: "barcode:${searchQuery}*") {
+        query: `{productVariants(first: 10, query: "barcode:*${searchQuery}*") {
           edges {
             node {
               barcode
@@ -71,8 +72,13 @@ const ordersController = {
     };
 
     const response = await cda.sendAxiosRequest(options);
+    fs.writeFile("replace.txt", JSON.stringify(response.data), function (err) {
+      if (err) throw err;
+      console.log("Saved!");
+    });
     if (response.data && response.data.productVariants) {
       const { edges } = response.data.productVariants;
+      console.log("edges", edges);
       let productList = [];
       if (edges.length > 0) {
         for (const { node } of edges) {
@@ -111,7 +117,6 @@ const ordersController = {
           .status(400)
           .send({ status: 400, message: "Missing shop domain header" });
       }
-      console.log("domain saveOrderToDatabase", domain);
       const mailOptions = {
         from: "Britcar UK <info@shopify.britcar.com>",
         to: "hmtahirs1@gmail.com",
@@ -171,6 +176,14 @@ const ordersController = {
         savedOrder.items = [];
         if (savedOrder.orderId) {
           const products = {};
+          fs.writeFile(
+            "lineItems.txt",
+            JSON.stringify(req.body.line_items),
+            function (err) {
+              if (err) throw err;
+              console.log("Saved!");
+            },
+          );
           for (const lineItem of req.body.line_items) {
             let product;
             if (products[lineItem.product_id] === undefined) {
@@ -207,7 +220,7 @@ const ordersController = {
               productId: lineItem.product_id,
               variantId: lineItem.variant_id,
               name:
-                lineItem.variant_title !== ""
+                lineItem.variant_title && lineItem.variant_title !== ""
                   ? "Pack of " + lineItem.variant_title + " - " + lineItem.title
                   : lineItem.title,
               // name: lineItem.name,

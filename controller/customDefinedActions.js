@@ -159,6 +159,7 @@ const cda = {
   },
   generatePos: async (activeOrders, accessToken, shopId, domain) => {
     let createdOrders = [];
+    const fileObj = {};
     if (activeOrders.length > 0) {
       const vendors = {};
       // const quantity = {}
@@ -174,37 +175,7 @@ const cda = {
             domain,
             accessToken,
           );
-          const mf = [
-            {
-              key: "part_number",
-              jsonValue: "XZQ000060",
-              namespace: "custom",
-              ownerType: "PRODUCT",
-              value: "XZQ000060",
-            },
-            {
-              key: "linked_parts",
-              jsonValue: "AFU4481, XBC500651, XBC501712LZN",
-              namespace: "custom",
-              ownerType: "PRODUCT",
-              value: "AFU4481, XBC500651, XBC501712LZN",
-            },
-            {
-              key: "brand",
-              jsonValue: "NEOLUX",
-              namespace: "custom",
-              ownerType: "PRODUCT",
-              value: "NEOLUX",
-            },
-            {
-              key: "dimensions_cm",
-              jsonValue: "1 x 1 x 2.5",
-              namespace: "custom",
-              ownerType: "PRODUCT",
-              value: "1 x 1 x 2.5",
-            },
-          ];
-          // const metafields = mf.reduce((acc, item) => {
+
           const metafields = product?.metafields?.nodes?.reduce((acc, item) => {
             if (item.namespace === "custom") {
               if (item.key === "part_number") {
@@ -243,6 +214,7 @@ const cda = {
       const poItems = {};
       const cutoffs = {};
       const poItemsAdded = [];
+      fileObj.metafieldValues = metafieldValues;
       console.log("metafieldValues", metafieldValues);
       for (const vendorName in vendors) {
         let createdProducts = [];
@@ -255,6 +227,7 @@ const cda = {
             domain,
             accessToken,
           );
+          fileObj[`variant-${item.variantId}`] = variant?.metafields?.nodes;
           console.log("variant?.metafields?.nodes", variant?.metafields?.nodes);
           const metafields = variant?.metafields?.nodes?.reduce((acc, item) => {
             if (item.namespace === "custom" && item.key === "bin_location") {
@@ -289,6 +262,7 @@ const cda = {
             part_number: metafieldValues[item.productId]?.part_number || "",
             notes: "-",
           };
+          fileObj[`po-item-${item.productId}`] = product;
           console.log(item.productId, product);
           poItems[vendorName].push(product);
         }
@@ -362,6 +336,12 @@ const cda = {
           return { error };
         }
       }
+
+      fs.writeFile("po-generated.txt", JSON.stringify(fileObj), function (err) {
+        if (err) throw err;
+        console.log("Saved!");
+      });
+
       if (createdOrders.length > 0) {
         return { createdOrders };
       } else {

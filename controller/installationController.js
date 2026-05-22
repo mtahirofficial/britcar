@@ -40,15 +40,16 @@ const installation = {
 
         const app_url = `https://admin.shopify.com/store/${shop.replace(".myshopify.com", "")}/apps/${APP_PATH}/orders?host=${result.shopifyHost}&shop=${shop}`;
 
-        res.send(`<script>
-            // This runs when the content is loaded
+        res.send(`
+          <script>
+            const appUrl = ${JSON.stringify(app_url)};
+
             window.addEventListener('DOMContentLoaded', function () {
-            // Your function here
-            console.log('Page rendered. Run your function here.');
-            window.parent.location.href = "${app_url}";
-            // window?.open("${app_url}", "_parent")
+              console.log('/', appUrl);
+              window.parent.location.href = appUrl;
             });
-         </script>`);
+          </script>
+          `);
       } else {
         const state = nonce();
         const redirectUri = `${hostLink}/callback`;
@@ -56,15 +57,16 @@ const installation = {
         res.cookie("state", state);
         // res.redirect(installUrl);
 
-        res.send(`<script>
-            // This runs when the content is loaded
+        res.send(`
+          <script>
+            const installUrl = ${JSON.stringify(installUrl)};
+
             window.addEventListener('DOMContentLoaded', function () {
-            // Your function here
-            console.log('Page rendered. Run your function here.');
-            window.parent.location.href = "${installUrl}";
-            // window?.open("${installUrl}", "_parent")
+              console.log("installUrl", installUrl);
+              window.parent.location.href = installUrl;
             });
-         </script>`);
+          </script>
+          `);
       }
     } else {
       res.send(
@@ -135,15 +137,16 @@ const installation = {
         // );
         const app_url = `https://admin.shopify.com/store/${shop.replace(".myshopify.com", "")}/apps/${APP_PATH}/orders?host=${host}&shop=${shop}`;
 
-        res.send(`<script>
-            // This runs when the content is loaded
-            window.addEventListener('DOMContentLoaded', function () {
-            // Your function here
-            console.log('Page rendered. Run your function here.');
-            window.parent.location.href = "${app_url}";
-            // window?.open("${app_url}", "_parent")
-            });
-         </script>`);
+        res.send(`
+<script>
+  const app_url = ${JSON.stringify(app_url)};
+
+  window.addEventListener('DOMContentLoaded', function () {
+    console.log("install app_url", app_url);
+    window.parent.location.href = app_url;
+  });
+</script>
+`);
       } else {
         const { status, statusText, headers, config, request, data } =
           accessResponse;
