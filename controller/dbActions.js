@@ -182,7 +182,7 @@ const db = {
       where,
       order: dataOrder,
       include,
-      logging: false,
+      logging: true,
     });
     return purchaseOrders;
   },

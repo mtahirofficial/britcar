@@ -239,13 +239,20 @@ const cda = {
           const orderNumber = await db.getSingleField(order, "orderNumber", {
             orderId: item.orderId,
           });
-          poCost = poCost + Number(item.price) * item.quantity;
+
+          let unitCost =
+            Number(variant.inventoryItem?.unitCost?.amount) * item.quantity;
+          poCost = poCost + unitCost;
+          // poCost = poCost + Number(item.price) * item.quantity;
           poCostPlusTax =
-            poCostPlusTax + (Number(item.price) + item.tax) * item.quantity;
+            poCostPlusTax +
+            (Number(variant.inventoryItem?.unitCost?.amount) + item.tax) *
+              item.quantity;
           const product = {
             shopId,
             barcode: item.barcode,
             patNum: "",
+            productId: metafieldValues[item.productId]?.part_number || "",
             variantId: item.variantId,
             orderId: item.orderId,
             orderNumber: orderNumber,
@@ -338,10 +345,10 @@ const cda = {
         }
       }
 
-      fs.writeFile("po-generated.txt", JSON.stringify(fileObj), function (err) {
-        if (err) throw err;
-        console.log("Saved!");
-      });
+      // fs.writeFile("po-generated.txt", JSON.stringify(fileObj), function (err) {
+      //   if (err) throw err;
+      //   console.log("Saved!");
+      // });
 
       if (createdOrders.length > 0) {
         return { createdOrders };

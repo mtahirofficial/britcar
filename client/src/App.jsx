@@ -4,6 +4,7 @@ import actionTypes from "./store/actionTypes";
 import AppRouter from "./router";
 import { useDispatch, useSelector } from "react-redux";
 import { Frame } from "@shopify/polaris";
+import { getPurchaseOrderList } from "./global-functions";
 
 const App = (props) => {
   const {
@@ -36,12 +37,12 @@ const App = (props) => {
       shopDomain = window.location.ancestorOrigins["0"].replace("https://", "");
     }
     if (shopDomain) {
-      extractVendors(serverLink, shopDomain);
+      extractVendors(shopDomain);
     }
 
     return shopDomain;
   };
-  const extractVendors = (serverLink, shopDomain) => {
+  const extractVendors = (shopDomain) => {
     const ifConnected = window.navigator.onLine;
     if (ifConnected) {
       dispatch({ type: setFetchingData, payload: true });
@@ -61,7 +62,7 @@ const App = (props) => {
               if (data.length > 0) {
                 dispatch({ type: setShopId, payload: data[0].shopId });
                 getCurrency(data[0].shopId);
-                getPurchaseOrderList(serverLink, data[0].shopId);
+                getPurchaseOrderList(data[0].shopId, dispatch);
               } else {
                 dispatch({ type: setFetchingData, payload: false });
               }
@@ -96,28 +97,28 @@ const App = (props) => {
     }
   };
 
-  const getPurchaseOrderList = (serverLink, shopId) => {
-    const ifConnected = window.navigator.onLine;
-    if (ifConnected) {
-      dispatch({ type: changeFetchingPos, payload: true });
-      const options = {
-        method: "GET",
-        url: `/order/purchaseOrders/${shopId}`,
-      };
-      axios(options)
-        .then(async ({ data }) => {
-          dispatch({ type: savePurchaseOrders, payload: data });
-          dispatch({ type: changeFetchingPos, payload: false });
-        })
-        .catch((error) => {
-          dispatch({ type: changeFetchingPos, payload: false });
-          console.log("error", error);
-          console.log(error);
-        });
-    } else {
-      console.log("Please, Check Your Internet Connection!");
-    }
-  };
+  // const getPurchaseOrderList = (shopId) => {
+  //   const ifConnected = window.navigator.onLine;
+  //   if (ifConnected) {
+  //     dispatch({ type: changeFetchingPos, payload: true });
+  //     const options = {
+  //       method: "GET",
+  //       url: `/order/purchaseOrders/${shopId}`,
+  //     };
+  //     axios(options)
+  //       .then(async ({ data }) => {
+  //         dispatch({ type: savePurchaseOrders, payload: data });
+  //         dispatch({ type: changeFetchingPos, payload: false });
+  //       })
+  //       .catch((error) => {
+  //         dispatch({ type: changeFetchingPos, payload: false });
+  //         console.log("error", error);
+  //         console.log(error);
+  //       });
+  //   } else {
+  //     console.log("Please, Check Your Internet Connection!");
+  //   }
+  // };
 
   return (
     <Frame>

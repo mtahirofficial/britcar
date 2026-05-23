@@ -187,7 +187,7 @@ const ReceiveStock = (props) => {
         </tr>
         <tr>
           <td className="receiveTd">Product ID</td>
-          <th className="receiveTh">{props.product.barcode}</th>
+          <th className="receiveTh">{props.product.part_number}</th>
         </tr>
         <tr>
           <td className="receiveTd">Name</td>

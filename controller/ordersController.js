@@ -72,14 +72,7 @@ const ordersController = {
     };
 
     const response = await cda.sendAxiosRequest(options);
-    await fs.writeFile(
-      "replace.txt",
-      JSON.stringify(response.data),
-      function (err) {
-        if (err) throw err;
-        console.log("Saved!");
-      },
-    );
+
     if (response.data && response.data.productVariants) {
       const { edges } = response.data.productVariants;
       let productList = [];
@@ -179,14 +172,7 @@ const ordersController = {
         savedOrder.items = [];
         if (savedOrder.orderId) {
           const products = {};
-          fs.writeFile(
-            "lineItems.txt",
-            JSON.stringify(req.body.line_items),
-            function (err) {
-              if (err) throw err;
-              console.log("Saved!");
-            },
-          );
+
           for (const lineItem of req.body.line_items) {
             let product;
             if (products[lineItem.product_id] === undefined) {
@@ -317,7 +303,6 @@ const ordersController = {
       orderBy,
       includeForOpen,
     );
-
     for (const order of openPos) {
       try {
         const response = await cda.submitOrder(order.id);
@@ -378,8 +363,6 @@ const ordersController = {
         [purchaseorderitem, "id", "DESC"],
       ], //order
     );
-    console.log("pos", pos);
-
     const vendorData = await db.getSingleRecord(vendor, {
       id: vendorId,
       shopId,

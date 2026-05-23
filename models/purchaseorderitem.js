@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       shopId: DataTypes.BIGINT,
       barcode: DataTypes.STRING,
+      productId: DataTypes.STRING,
       variantId: DataTypes.STRING,
       purchaseorderId: DataTypes.BIGINT,
       patNum: DataTypes.STRING,

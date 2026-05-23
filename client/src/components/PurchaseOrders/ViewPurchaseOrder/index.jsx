@@ -211,9 +211,9 @@ const ViewPurchaseOrder = (props) => {
     const submittedAt = `${submittedDate.toDateString()} ${submittedDate.getHours()}:${submittedDate.getMinutes()}`;
     dispatch({
       type: updateOrder,
-      payload: { key: "submittedAt", value: submittedAt },
+      payload: { submittedAt: submittedAt, status: "sub" },
     });
-    const pos = purchaseOrders;
+    const pos = [...purchaseOrders];
     for (const po of pos) {
       if (po.id === order.id) {
         po.submittedAt = submittedAt;
@@ -271,36 +271,14 @@ const ViewPurchaseOrder = (props) => {
 
   if (Object.keys(order).length > 0) {
     const products = order.purchaseorderitems;
-    const cost = moneyFormat.replace(
-      "{{amount}}",
-      order.costValue.toFixed(2).toString(),
-    );
-
-    const orderDataRows = [
-      ["Supplier:", <Heading>{order.vendor.name}</Heading>],
-      ["Cost of Order:", <Heading>{cost}</Heading>],
-      [
-        "Cutoff Time:",
-        <Heading>
-          {order.status === "null" ? (
-            <CountDownTimerC
-              orderId={order.id}
-              cutoff={order.timeUntilCutoff}
-            />
-          ) : (
-            poStatus[order.status]
-          )}
-        </Heading>,
-      ],
-      // ['Cutoff Time:', <Heading>{order.timeUntilCutoff}</Heading>],
-      ["Submitted At:", <Heading>{order.submittedAt}</Heading>],
-      ["Created At:", <Heading>{order.createdAt}</Heading>],
-    ];
     const csvList = [];
+
+    let cost = 0;
     const productDataRows = products.map((product, index) => {
-      csvList.push({ code: product.barcode, quantity: product.qty });
+      csvList.push({ code: product.part_number, quantity: product.qty });
 
       const pCost = moneyFormat.replace("{{amount}}", product.costPerUnit);
+      cost += parseFloat(product.costPerUnit) * parseInt(product.qty);
 
       const actionsList = [
         {
@@ -332,7 +310,7 @@ const ViewPurchaseOrder = (props) => {
         },
       ];
       return [
-        product.barcode,
+        product.part_number,
         <span
           style={{
             display: "inline-block",
@@ -404,6 +382,32 @@ const ViewPurchaseOrder = (props) => {
       ];
     });
 
+    cost = moneyFormat.replace("{{amount}}", cost.toFixed(2).toString());
+    let order_cost = moneyFormat.replace(
+      "{{amount}}",
+      order.costValue.toFixed(2).toString(),
+    );
+    const orderDataRows = [
+      ["Supplier:", <Heading>{order.vendor.name}</Heading>],
+      ["Cost of Order:", <Heading>{cost || order_cost}</Heading>],
+      [
+        "Cutoff Time:",
+        <Heading>
+          {order.status === "null" ? (
+            <CountDownTimerC
+              orderId={order.id}
+              cutoff={order.timeUntilCutoff}
+            />
+          ) : (
+            poStatus[order.status]
+          )}
+        </Heading>,
+      ],
+      // ['Cutoff Time:', <Heading>{order.timeUntilCutoff}</Heading>],
+      ["Submitted At:", <Heading>{order.submittedAt}</Heading>],
+      ["Created At:", <Heading>{order.createdAt}</Heading>],
+    ];
+
     const csvHeaders = [
       { label: "Code", key: "code" },
       { label: "Qty", key: "quantity" },
@@ -430,8 +434,14 @@ const ViewPurchaseOrder = (props) => {
               onAction: () => dispatch({ type: viewOrder, payload: {} }),
             },
             {
-              content: "Submit Order",
-              disabled: OrderSubmitting ? true : false,
+              content:
+                order.submittedAt && order.status === "sub"
+                  ? "Submitted"
+                  : "Submit Order",
+              disabled:
+                OrderSubmitting || (order.submittedAt && order.status === "sub")
+                  ? true
+                  : false,
               loading: OrderSubmitting ? true : false,
               onAction: () => {
                 setOrderSubmitting(true);

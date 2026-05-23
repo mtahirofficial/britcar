@@ -14,6 +14,9 @@ module.exports = {
       barcode: {
         type: Sequelize.STRING,
       },
+      productId: {
+        type: Sequelize.STRING,
+      },
       variantId: {
         type: Sequelize.STRING,
       },
