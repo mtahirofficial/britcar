@@ -8,6 +8,7 @@ const OrderDetails = (props) => {
     "{{amount}}",
     (props.item.qty * props.item.costPerUnit).toFixed(2),
   );
+
   return (
     <div>
       <table className="top" style={{ marginBottom: "5%" }}>
@@ -46,15 +47,15 @@ const OrderDetails = (props) => {
             <th className="bottomTh">Qty. Allocated</th>
             <th className="bottomTh">Received So Far</th>
             <th className="bottomTh">Order Total</th>
-            <th className="bottomTh">Despatch Bay</th>
+            <th className="bottomTh">Dispatch Bay</th>
           </tr>
         </thead>
         <tbody className="bottomTBody">
           <tr>
             <td className="bottomTd">{props.item.orderNumber}</td>
             <td className="bottomTd">
-              {props.customer.hasOwnProperty("first_name")
-                ? props.customer.first_name + " " + props.customer.last_name
+              {props.customer.hasOwnProperty("firstName")
+                ? props.customer.firstName + " " + props.customer.lastName
                 : ""}
             </td>
             <td className="bottomTd">{props.item.qty}</td>

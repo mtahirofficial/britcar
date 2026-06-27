@@ -384,28 +384,46 @@ const cda = {
     return `${dimensions.width}x${dimensions.height}x${dimensions.length}`;
   },
   getDispatchBay: async (orderId, shopData) => {
-    const options = {
-      method: "GET",
-      url: `https://${shopData.domain}/admin/api/2025-07/orders/${orderId}.json`,
-      headers: {
-        "content-type": "application/json",
-        "X-Shopify-Access-Token": shopData.accessToken,
-      },
-    };
-    const axoisResponse = await cda.sendAxiosRequest(options);
-    if (axoisResponse.order) {
-      const { note_attributes, customer } = axoisResponse.order;
-      if (note_attributes.length > 0) {
-        for (const attribute of note_attributes) {
-          if (attribute.name === "Despatch Bay:") {
-            return { data: { dispatchBay: attribute.value, customer } };
-          }
-        }
-      } else {
-        return { data: { dispatchBay: "", customer } };
-      }
-    } else {
-      return axoisResponse;
+    // const options = {
+    //   method: "GET",
+    //   url: `https://${shopData.domain}/admin/api/2025-07/orders/${orderId}.json`,
+    //   headers: {
+    //     "content-type": "application/json",
+    //     "X-Shopify-Access-Token": shopData.accessToken,
+    //   },
+    // };
+    // const axoisResponse = await cda.sendAxiosRequest(options);
+    // if (axoisResponse.order) {
+    //   const { note_attributes, customer } = axoisResponse.order;
+    //   if (note_attributes.length > 0) {
+    //     for (const attribute of note_attributes) {
+    //       if (attribute.name === "Despatch Bay:") {
+    //         return { data: { dispatchBay: attribute.value, customer } };
+    //       }
+    //     }
+    //   } else {
+    //     return { data: { dispatchBay: "", customer } };
+    //   }
+    // } else {
+    //   return axoisResponse;
+    // }
+    const order = await ShopifyController.getorder(
+      orderId,
+      shopData.domain,
+      shopData.accessToken,
+    );
+    if (order) {
+      const {
+        metafields: { nodes },
+        customer,
+      } = order;
+      const dispatchBayMetafield = nodes.find(
+        (metafield) => metafield.key === "dispatch_bay",
+      );
+      const dispatchBay = dispatchBayMetafield
+        ? dispatchBayMetafield.value
+        : "";
+      return { dispatchBay, customer };
     }
   },
   sendMail: async (options) => {
@@ -540,16 +558,14 @@ const cda = {
           .replace("{{sellerPhone}}", "TelePhone: " + seller.phone)
           .replace("{{sellerEmail}}", "Email: " + seller.email);
 
-        console.log("order", order);
-
         const rows = order.purchaseorderitems.map((product) => {
           return `<tr key={i}>
-                        <td>${product.part_number}</td>
-                        <td>${product.qty}</td>
-                        <td style="text-align: left;">${product.description}</td>
-                        <td>${product.orderNumber}</td>
-                        <td>${product.costPerUnit}</td>
-                        </tr>`;
+            <td>${product.part_number}</td>
+            <td>${product.qty}</td>
+            <td style="text-align: left;">${product.description}</td>
+            <td>${product.orderNumber}</td>
+            <td>${product.costPerUnit}</td>
+          </tr>`;
         });
         html = html.replace("{{rows}}", rows.join(""));
 
@@ -569,10 +585,8 @@ const cda = {
               },
             ],
           };
-          console.log("mailOptions pdf", mailOptions);
 
           const aknowledge = await cda.sendMail(mailOptions);
-          console.log("aknowledge", aknowledge);
 
           let isSubmitted;
           if (aknowledge) {

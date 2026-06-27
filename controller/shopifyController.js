@@ -286,6 +286,51 @@ const ShopifyController = {
       res.json({ success: false, message: e.message });
     }
   },
+  getorder: async (orderId, domain, accessToken) => {
+    let data = JSON.stringify({
+      query: `{
+        order(id: "gid://shopify/Order/${orderId}") {
+          id
+          name
+          customer{
+            firstName
+            lastName
+          }
+          metafields(first:10, namespace:"custom"){
+          nodes{
+              id
+              jsonValue
+              key
+              namespace
+              ownerType
+              type
+              value
+              description
+            }
+          }
+        }
+      }`,
+    });
+
+    const config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `https://${domain}/admin/api/2025-01/graphql.json`,
+      headers: {
+        "x-shopify-access-token": accessToken,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    try {
+      const response = await axios.request(config);
+      return response.data?.data?.order;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
 };
 
 module.exports = { ShopifyController };

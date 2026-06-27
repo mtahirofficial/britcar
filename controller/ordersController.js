@@ -396,12 +396,8 @@ const ordersController = {
       });
       const DispatchBay = await cda.getDispatchBay(orderId, shopData);
 
-      let dispatchBay = "",
-        customer = {};
-      if (DispatchBay.data) {
-        customer = DispatchBay.data.customer ?? {};
-        dispatchBay = DispatchBay.data.dispatchBay;
-      }
+      let dispatchBay = DispatchBay.dispatchBay;
+      let customer = DispatchBay.customer ?? {};
       let status = "stand";
       const receivedQty = qtyToShow + received;
       if (qty <= receivedQty) {
